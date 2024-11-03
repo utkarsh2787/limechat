@@ -35,7 +35,7 @@ SECRET_KEY = 'django-insecure-bol!rv5xdpkg!ru-7+m-$r5n!im+6x6jwyksfz^5=0ed)d0qe%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['limechat.onrender.com']
 
 
 # Application definition
