@@ -1,0 +1,132 @@
+<!-- frontend/templates/frontend/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentence Processor</title>
+    <style>
+        body {
+            background-color: #1e1e2f;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #d1d1e0;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            max-width: 800px;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1; 
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #444455;
+            background-color: #1e1e2f;
+            color: #ffffff;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5c5cff;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4a4acb;
+        }
+
+        #responseOutput {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 1.1rem;
+            color: #c0c0ff;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, #2a2a3a, #1e1e2f, #2a2a3a);
+            background-size: 600% 600%;
+            z-index: -1;
+            animation: gradientBackground 10s ease infinite;
+        }
+
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+
+    <h1>USIB Search</h1>
+
+    <form id="sentenceForm">
+        <input type="text" id="sentence" name="sentence" placeholder="Enter a sentence" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="responseOutput"></div>
+
+    <script>
+        document.getElementById("sentenceForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const sentence = document.getElementById("sentence").value;
+
+            try {
+                const response = await fetch("/api/external-data/", {  
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ sentence: sentence })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById("responseOutput").innerText = data;
+                } else {
+                    document.getElementById("responseOutput").innerText = "Error: " + response.statusText;
+                }
+            } catch (error) {
+                document.getElementById("responseOutput").innerText = "Error: " + error;
+            }
+        });
+    </script>
+</body>
+</html>
